@@ -28,7 +28,7 @@ namespace DublicateFinder.Cmd
                     filesFromCurrentDirectory = null;
                 }
 
-                if (filesFromCurrentDirectory != null && filesFromCurrentDirectory.Length > 0)
+                if ((filesFromCurrentDirectory?.Any()) == true)
                 {
                     foreach (String fileName in filesFromCurrentDirectory)
                     {
