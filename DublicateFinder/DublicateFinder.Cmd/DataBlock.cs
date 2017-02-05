@@ -36,5 +36,7 @@ namespace DublicateFinder.Cmd
         }
 
         private readonly byte[] _buffer;
+
+        public Byte[] Buffer => _buffer;
     }
 }
