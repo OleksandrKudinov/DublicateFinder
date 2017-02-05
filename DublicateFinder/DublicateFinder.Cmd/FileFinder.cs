@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace DublicateFinder.Cmd
 {
@@ -13,17 +14,14 @@ namespace DublicateFinder.Cmd
 
         public String[] GetAllFileNames(String root)
         {
-            String[] subdirectories = GetAllSubDirectories(root).ToArray();
+            IEnumerable<String> subdirectories = GetAllSubDirectories(root);
+
             List<String> fileNames = new List<String>();
 
-            String currentDirectory = null;
-
-            for (int i = 0; i < subdirectories.Length; i++)
-            {
-                currentDirectory = subdirectories[i];
+            foreach(String currentDirectory in subdirectories)
+            {     
                 String[] filesFromCurrentDirectory = Directory.GetFiles(currentDirectory);
 
-                // To investigate https://referencesource.microsoft.com/#mscorlib/system/collections/generic/list.cs,e569d850a66a1771,references
                 fileNames.AddRange(filesFromCurrentDirectory);
             }
 
@@ -55,10 +53,6 @@ namespace DublicateFinder.Cmd
                     _progress?.Report(exception.Message);
                 }
 
-                //https://msdn.microsoft.com/uk-ua/library/9k7k7cf0.aspx
-                //https://habrahabr.ru/post/136828/
-                //https://msdn.microsoft.com/ru-ru/library/system.collections.ienumerable(v=vs.110).aspx
-                //https://msdn.microsoft.com/ru-ru/library/system.collections.ienumerator(v=vs.110).aspx
                 yield return currentDirectory;
             }
         }
