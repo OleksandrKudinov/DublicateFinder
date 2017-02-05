@@ -6,6 +6,11 @@ namespace DublicateFinder.Cmd
 {
     internal sealed class FileFinder
     {
+        public FileFinder(IProgress<String> progress = null)
+        {
+            _progress = progress;
+        }
+
         public String[] GetAllFileNames(String root)
         {
             String[] subdirectories = GetAllSubDirectories(root);
@@ -50,5 +55,7 @@ namespace DublicateFinder.Cmd
 
             return subdirectories.ToArray();
         }
+
+        private readonly IProgress<string> _progress;
     }
 }
