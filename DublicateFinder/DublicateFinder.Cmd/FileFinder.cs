@@ -50,13 +50,13 @@ namespace DublicateFinder.Cmd
                 }
                 catch (UnauthorizedAccessException exception)
                 {
-                    _progress?.Report(exception.Message);
+                    _progress?.Report($"{exception.Message}");
                 }
 
                 yield return currentDirectory;
             }
         }
 
-        private readonly IProgress<string> _progress;
+        private readonly IProgress<String> _progress;
     }
 }
