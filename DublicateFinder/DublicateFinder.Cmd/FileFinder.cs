@@ -26,25 +26,12 @@ namespace DublicateFinder.Cmd
         public IEnumerable<String> GetAllFileNames(String root)
         {
             IEnumerable<String> subdirectories = GetAllSubDirectories(root);
-            String[] filesFromCurrentDirectory = null;
+
             foreach (String currentDirectory in subdirectories)
             {
-                try
+                foreach (String filename in ExtractFilesFromDirectory(currentDirectory))
                 {
-                    filesFromCurrentDirectory = Directory.GetFiles(currentDirectory);
-                }
-                catch (Exception exception)
-                {
-                    _progress?.Report($"{exception.Message}");
-                    filesFromCurrentDirectory = null;
-                }
-
-                if ((filesFromCurrentDirectory?.Any()) == true)
-                {
-                    foreach (String fileName in filesFromCurrentDirectory)
-                    {
-                        yield return fileName;
-                    }
+                    yield return filename;
                 }
             }
         }
@@ -75,6 +62,29 @@ namespace DublicateFinder.Cmd
                 }
 
                 yield return currentDirectory;
+            }
+        }
+
+        private IEnumerable<String> ExtractFilesFromDirectory(String directory)
+        {
+            String[] filesFromCurrentDirectory = null;
+            try
+            {
+                filesFromCurrentDirectory = Directory.GetFiles(directory);
+            }
+
+            catch (Exception exception)
+            {
+                _progress?.Report($"{exception.Message}");
+                filesFromCurrentDirectory = null;
+            }
+
+            if ((filesFromCurrentDirectory?.Any()) == true)
+            {
+                foreach (String fileName in filesFromCurrentDirectory)
+                {
+                    yield return fileName;
+                }
             }
         }
 
