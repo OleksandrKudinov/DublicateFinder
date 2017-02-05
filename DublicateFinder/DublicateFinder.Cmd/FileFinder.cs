@@ -12,20 +12,30 @@ namespace DublicateFinder.Cmd
             _progress = progress;
         }
 
-        public String[] GetAllFileNames(String root)
+        public IEnumerable<String> GetAllFileNames(String root)
         {
             IEnumerable<String> subdirectories = GetAllSubDirectories(root);
+            String[] filesFromCurrentDirectory = null;
+            foreach (String currentDirectory in subdirectories)
+            {
+                try
+                {
+                    filesFromCurrentDirectory = Directory.GetFiles(currentDirectory);
+                }
+                catch (Exception exception)
+                {
+                    _progress?.Report($"{exception.Message}");
+                    filesFromCurrentDirectory = null;
+                }
 
-            List<String> fileNames = new List<String>();
-
-            foreach(String currentDirectory in subdirectories)
-            {     
-                String[] filesFromCurrentDirectory = Directory.GetFiles(currentDirectory);
-
-                fileNames.AddRange(filesFromCurrentDirectory);
+                if (filesFromCurrentDirectory != null && filesFromCurrentDirectory.Length > 0)
+                {
+                    foreach (String fileName in filesFromCurrentDirectory)
+                    {
+                        yield return fileName;
+                    }
+                }
             }
-
-            return fileNames.ToArray();
         }
 
         private IEnumerable<String> GetAllSubDirectories(String root)
