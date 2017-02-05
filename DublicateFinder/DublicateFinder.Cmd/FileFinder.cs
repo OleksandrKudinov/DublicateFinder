@@ -23,10 +23,8 @@ namespace DublicateFinder.Cmd
                 currentDirectory = subdirectories[i];
                 String[] filesFromCurrentDirectory = Directory.GetFiles(currentDirectory);
 
-                for (int j = 0; j < filesFromCurrentDirectory.Length; j++)
-                {
-                    fileNames.Add(filesFromCurrentDirectory[j]);
-                }
+                // To investigate https://referencesource.microsoft.com/#mscorlib/system/collections/generic/list.cs,e569d850a66a1771,references
+                fileNames.AddRange(filesFromCurrentDirectory);
             }
 
             return fileNames.ToArray();
