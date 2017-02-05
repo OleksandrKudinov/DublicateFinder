@@ -15,10 +15,33 @@ namespace DublicateFinder.Cmd
         public IEnumerable<FileInfo> GetAllFiles(String root)
         {
             IEnumerable<String> fileNames = GetAllFileNames(root);
-            
-            foreach(String fileName in fileNames)
+            FileInfo fileInfo = null;
+
+            foreach (String fileName in fileNames)
             {
-                FileInfo fileInfo = new FileInfo(fileName);
+                try
+                {
+                    fileInfo = new FileInfo(fileName);
+                }
+                catch (PathTooLongException exception)
+                {
+                    /*
+                     * Probably you can try to use .NET 4.6.2 to avoid this issue [1], 
+                     * but in this case you will have troubles at least with FileInfo. 
+                     * Especially when you try to read Length propery of FileInfo, 
+                     * you will have FileNotFound exception.
+                     * 
+                     * [1] https://blogs.msdn.microsoft.com/jeremykuhne/2016/07/30/net-4-6-2-and-long-paths-on-windows-10/
+                     * [2] https://blogs.msdn.microsoft.com/bclteam/2007/02/13/long-paths-in-net-part-1-of-3-kim-hamilton/
+                     * 
+                     * I think it will be probably a good choice to send message 
+                     * about this exception to UI just for notification about excluding 
+                     * this file from processing.
+                     */
+                    _progress.Report($"{exception.Message}");
+                    continue;
+                }
+
                 yield return fileInfo;
             }
         }
