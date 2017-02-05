@@ -55,6 +55,10 @@ namespace DublicateFinder.Cmd
                     _progress?.Report(exception.Message);
                 }
 
+                //https://msdn.microsoft.com/uk-ua/library/9k7k7cf0.aspx
+                //https://habrahabr.ru/post/136828/
+                //https://msdn.microsoft.com/ru-ru/library/system.collections.ienumerable(v=vs.110).aspx
+                //https://msdn.microsoft.com/ru-ru/library/system.collections.ienumerator(v=vs.110).aspx
                 yield return currentDirectory;
             }
         }
