@@ -13,7 +13,7 @@ namespace DublicateFinder.Cmd
 
         public String[] GetAllFileNames(String root)
         {
-            String[] subdirectories = GetAllSubDirectories(root);
+            String[] subdirectories = GetAllSubDirectories(root).ToArray();
             List<String> fileNames = new List<String>();
 
             String currentDirectory = null;
@@ -30,18 +30,16 @@ namespace DublicateFinder.Cmd
             return fileNames.ToArray();
         }
 
-        private String[] GetAllSubDirectories(String root)
+        private IEnumerable<String> GetAllSubDirectories(String root)
         {
             Queue<String> roots = new Queue<String>();
-            List<String> subdirectories = new List<String>();
+
             roots.Enqueue(root);
             String currentDirectory = null;
 
             while (roots.Count > 0)
             {
                 currentDirectory = roots.Dequeue();
-
-                subdirectories.Add(currentDirectory);
 
                 try
                 {
@@ -56,9 +54,9 @@ namespace DublicateFinder.Cmd
                 {
                     _progress?.Report(exception.Message);
                 }
-            }
 
-            return subdirectories.ToArray();
+                yield return currentDirectory;
+            }
         }
 
         private readonly IProgress<string> _progress;
