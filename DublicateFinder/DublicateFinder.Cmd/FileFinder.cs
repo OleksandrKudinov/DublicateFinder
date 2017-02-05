@@ -12,6 +12,17 @@ namespace DublicateFinder.Cmd
             _progress = progress;
         }
 
+        public IEnumerable<FileInfo> GetAllFiles(String root)
+        {
+            IEnumerable<String> fileNames = GetAllFileNames(root);
+            
+            foreach(String fileName in fileNames)
+            {
+                FileInfo fileInfo = new FileInfo(fileName);
+                yield return fileInfo;
+            }
+        }
+
         public IEnumerable<String> GetAllFileNames(String root)
         {
             IEnumerable<String> subdirectories = GetAllSubDirectories(root);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace DublicateFinder.Cmd
 {
@@ -19,12 +20,12 @@ namespace DublicateFinder.Cmd
             String root = @"D:\";
             FileFinder provider = new FileFinder(new DebugOutput());
 
-            IEnumerable<String> fileNames = provider.GetAllFileNames(root);
+            IEnumerable<FileInfo> files = provider.GetAllFiles(root);
 
             Console.WriteLine("Files:");
-            foreach (String fileName in fileNames)
+            foreach (FileInfo file in files)
             {
-                Console.WriteLine(fileName);
+                Console.WriteLine(file.Length);
             }
         }
     }
