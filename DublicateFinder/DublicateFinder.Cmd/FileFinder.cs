@@ -45,11 +45,18 @@ namespace DublicateFinder.Cmd
 
                 subdirectories.Add(currentDirectory);
 
-                String[] subDirectories = Directory.GetDirectories(currentDirectory);
-
-                for (int i = 0; i < subDirectories.Length; i++)
+                try
                 {
-                    roots.Enqueue(subDirectories[i]);
+                    String[] subDirectories = Directory.GetDirectories(currentDirectory);
+
+                    for (int i = 0; i < subDirectories.Length; i++)
+                    {
+                        roots.Enqueue(subDirectories[i]);
+                    }
+                }
+                catch (UnauthorizedAccessException exception)
+                {
+                    _progress?.Report(exception.Message);
                 }
             }
 
